@@ -17,8 +17,10 @@ class AClassifier:
         :param y: [Mx1] Actual Classes for the given Features/Data.
         :return: None
         """
-        self.classes = classes or np.unique(y)
-        raise NotImplementedError()
+        if classes is not None:
+            self.classes = classes
+        else:
+            self.classes = np.unique(y)
 
     def predict(self, x: np.array) -> np.array:
         """

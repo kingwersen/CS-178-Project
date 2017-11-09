@@ -3,7 +3,7 @@ import numpy as np
 from Classifiers.AClassifier import AClassifier
 
 
-def cross_validate(classifiers: [AClassifier], x: np.array, y: np.array, k: int=1) -> float:
+def cross_validate(classifier: AClassifier, x: np.array, y: np.array, k: int=1) -> float:
     """
     Produces the mean proportion of error across all classifiers and splits.
     For every split, adds the probabilities of each class predicted by each classifier, and predicts the
@@ -16,21 +16,12 @@ def cross_validate(classifiers: [AClassifier], x: np.array, y: np.array, k: int=
     """
     assert (x.shape[0] == y.shape[0])
 
-    classes = np.unique(y)  # Ensure all training data contain all class types. For predict_soft().
-    prob_shape = (x.shape[0], len(classes))
-
     sum_err = 0
     for i in range(k):
         xTrain, yTrain, xValid, yValid = split_data(x, y, k, i)
 
-        # Add the probabilities of each of the classifiers' predictions.
-        probabilities = np.zeros(prob_shape)  # [MxK]
-        for j, c in enumerate(classifiers):
-            c.train(xTrain, yTrain, classes=classes)
-            probabilities += c.predict_soft(xValid)
-
-        # Predict the greatest probability. Sum the mean error.
-        yhat = classifiers[0].classes[np.argmax(probabilities, axis=1)]  # [Mx1]
+        classifier.train(xTrain, yTrain)
+        yhat = classifier.predict(xValid)
         sum_err += np.mean(y != yhat)
 
     return sum_err / k
