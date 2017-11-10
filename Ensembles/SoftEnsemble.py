@@ -3,7 +3,12 @@ import numpy as np
 from Classifiers.AClassifier import AClassifier
 
 
-class MultiClassifier(AClassifier):
+class SoftEnsemble(AClassifier):
+    """
+    An Ensemble that predicts classes by adding the soft predictions of
+    its classifiers.
+    All classifiers' predictions are weighted the same.
+    """
 
     def __init__(self, classifiers: [AClassifier]):
         super().__init__()

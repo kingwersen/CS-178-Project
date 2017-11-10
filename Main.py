@@ -1,8 +1,5 @@
-import numpy as np
-
-from Classifiers.AClassifier import *
-from Classifiers.MultiClassifier import *
-from Validation import *
+from Ensembles.SoftEnsemble import *
+from Validation import cross_validate
 
 # Load Data
 xTrain = np.genfromtxt("Data/X_train.txt", delimiter=None)
@@ -25,7 +22,7 @@ print("M: %d, N: %d, K: %d, Classes: %s\n" % (M, N, K, classes))
 # Classifier, X Subset, Y Subset, Cross-Validations
 tests = [
     (AClassifier(), xTrain[:5000, :], yTrain[:5000], 20),  # Example 1
-    (MultiClassifier([AClassifier(), AClassifier()]), xTrain, yTrain, 20),  # Example 2
+    (SoftEnsemble([AClassifier(), AClassifier()]), xTrain, yTrain, 20),  # Example 2
 ]
 index = int(input("Select a test number to run [0,%d]: " % (len(tests)-1)))
 if index < 0 or index >= len(tests):
